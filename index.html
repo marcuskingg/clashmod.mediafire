@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Redirecting...</title>
+  <style>
+    :root{
+      --bg:#000;
+      --green:#00ff66;
+      --cyan:#00ffff;
+    }
+    html,body{height:100%;margin:0}
+    body {
+      background-color: var(--bg);
+      color: var(--green);
+      font-family: "Courier New", monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      overflow: hidden;
+      padding-top: 40px;
+    }
+
+    h1 {
+      z-index: 3;
+      position: relative;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: var(--green);
+      text-shadow: 0 0 8px rgba(0,255,102,0.6);
+    }
+
+    #counter {
+      z-index: 3;
+      position: relative;
+      font-size: 5rem;
+      font-weight: bold;
+      margin: 20px 0 30px 0;
+      color: var(--cyan);
+      text-shadow: 0 0 12px rgba(0,255,255,0.7);
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.85; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .ads {
+      z-index: 3;
+      position: relative;
+      border-top: 1px solid rgba(0,255,102,0.3);
+      padding-top: 14px;
+      width: 100%;
+      max-width: 520px;
+      margin-top: 20px;
+    }
+    .ads a {
+      display: block;
+      color: var(--cyan);
+      text-decoration: none;
+      font-size: 1.2rem;
+      margin: 8px 0;
+      text-shadow: 0 0 6px rgba(0,255,255,0.5);
+    }
+    .ads a:hover {
+      color: var(--green);
+    }
+    .ads .follow { font-style: italic; opacity: .9; margin-top:6px; color: var(--green); }
+
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      display: block;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+      z-index: 2;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="overlay"></div>
+
+  <h1>You will be redirected to the MediaFire download — please wait</h1>
+  <div id="counter">5</div>
+
+  <div class="ads">
+    <a href="https://www.tiktok.com/@clash.mod" target="_blank">@clash.mod — TikTok</a>
+    <a href="https://www.instagram.com/itss.marcusss" target="_blank">@itss.marcusss — Instagram</a>
+    <div class="follow">Follow me for more!</div>
+  </div>
+
+  <script>
+    // Contador y redirección
+    let count = 5;
+    const counter = document.getElementById("counter");
+    const redirectUrl = "https://www.mediafire.com/file/1v2185hwwvsca3m/clash-royale-mod-2024_4.apk/file?hash=7HmdWxi5RFIFZAGEovxSCpUmvuYIVLGMhzgN33Zbki6lWLZDrED1BHzFFjILQQ0i";
+
+    const interval = setInterval(() => {
+      count--;
+      counter.textContent = count;
+      if (count === 0) {
+        clearInterval(interval);
+        window.location.href = redirectUrl;
+      }
+    }, 1000);
+
+    // Fondo Matrix con palabra clash.mod
+    (function(){
+      const canvas = document.getElementById('matrix');
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const word = "clash.mod";
+      const fontSize = 18;
+      const columns = Math.floor(canvas.width / fontSize);
+      const drops = new Array(columns).fill(0);
+
+      function draw(){
+        ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = fontSize + "px Courier New";
+        for (let i = 0; i < drops.length; i++){
+          const ch = word[i % word.length];
+          const gradient = ctx.createLinearGradient(0,0,0,canvas.height);
+          gradient.addColorStop(0, "#00ff66");
+          gradient.addColorStop(1, "#00ffff");
+          ctx.fillStyle = gradient;
+
+          ctx.fillText(ch, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+
+      setInterval(draw, 40);
+    })();
+  </script>
+</body>
+</html>
